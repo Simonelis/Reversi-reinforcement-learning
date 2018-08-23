@@ -10,3 +10,5 @@ To quickly familiarize with the rules one can play a game online
 at, for example, http://www.webgamesonline.com/reversi/
 
 Currently the program does not use neural networks for it's evaluation function.
+
+\theta
