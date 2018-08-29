@@ -9,6 +9,8 @@ own color and at the end of the game have more stones of your color than your op
 To quickly familiarize with the rules one can play a game online
 at, for example, http://www.webgamesonline.com/reversi/
 
+the bot can be played against at depth-10 search by launching player.py with PyPy3 (this is needed for reasonable 3-10 second move time).
+
 Reinforcement learning pipeline
 
 The system has 4 modules: the value function approximator, the game-playing agent, the game database and the 
@@ -46,8 +48,10 @@ How these 4 modules talk to each other is shown in the project structure.png . T
 
 At this point the program has been training for 3 days (using PyPy3) and has played around 200.000 games.
 Half of these games are stored in a file of 100MB, however github does not allow big files
-to be stored. 
+to be stored. The strength of the evaluation function appears to be as good as WZebra's (a statement produced by playing several no-book
+depth 10-12 games against WZebra).
 
 The latest feature values (dictionaries) are in the main directory and the bot can be played against at depth-10
 search by launching player.py with PyPy3 (this is needed for reasonable 3-10 second move time).
 
+The quality of code... I know... not the highest. It will be fixed.
