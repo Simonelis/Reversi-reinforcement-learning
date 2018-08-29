@@ -49,7 +49,7 @@ How these 4 modules talk to each other is shown in the project structure.png . T
 At this point the program has been training for 3 days (using PyPy3) and has played around 200.000 games.
 Half of these games are stored in a file of 100MB, however github does not allow big files
 to be stored. The strength of the evaluation function appears to be as good as WZebra's (a statement produced by playing several no-book
-depth 10-12 games against WZebra).
+depth 10-12 games against WZebra, no statistically significant tests yet).
 
 The latest feature values (dictionaries) are in the main directory and the bot can be played against at depth-10
 search by launching player.py with PyPy3 (this is needed for reasonable 3-10 second move time).
