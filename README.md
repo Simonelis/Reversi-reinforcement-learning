@@ -18,7 +18,7 @@ Value function approximation
 
 A given board configuration has, in theory, a value between -64 (all pieces are white) and 64 (all pieces are black) 
 that is the final score of the game if both parties (white and black) played the game perfectly to the end.
-However, if there are more than 10-20 turns remaining, it is computationally impossible to calculate this score. Therefore, an approximation is used: the "value function" is a linear function of scores of separate board patters (lines, corners, some other combinations) and approximates the perfect final score if both parties played out a perfect game. For example, the edge of the board
+However, if there are more than 10-20 turns remaining, it is computationally impossible to calculate this score. Therefore, an approximation is used: the "value function". Value function is a linear function of scores of separate board patters (lines, corners, some other combinations) and approximates the perfect final score if both parties played out a perfect game. For example, the edge of the board
 of a specific board configuration would be --OOXX-- (O is white, X is black and - is empty). We would have to look up
 in a dictionary what score this particular pattern has, say c1. Then, we have to check all other edges, obtain their scores
 c2, c3, c4. Then, we have to check all other patterns and obtain other scores. Finally, the value function of this particular
