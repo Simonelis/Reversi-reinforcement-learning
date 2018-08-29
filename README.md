@@ -11,7 +11,7 @@ at, for example, http://www.webgamesonline.com/reversi/
 
 Reinforcement learning pipeline
 
-The system has 4 components: the value function approximator, the game-playing agent, the game database and the 
+The system has 4 modules: the value function approximator, the game-playing agent, the game database and the 
 feature training module. 
 
 Value function approximation
