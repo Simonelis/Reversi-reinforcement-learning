@@ -37,7 +37,7 @@ In Reversi, just like in chess, it pays to see several moves ahead - the more th
 
 Game database
 
-This module is simple and keeps the games and their final scores (Monte-Carlo measure) and agent's own evaluation at every step of each game (a kind of bootstrapping measure). Over time, some data cleansing is applied, such as deleting old and incorrect games, recalculating bootstrapping scores, deleting games that area too one-sided.
+This module is simple and keeps the games and their final scores (Monte-Carlo measure) and agent's own evaluation at every step of each game (a kind of bootstrapping measure). Over time, some data cleansing is applied, such as deleting old and incorrect games, recalculating bootstrapping scores, deleting games that are too one-sided.
 
 Feature training
 
