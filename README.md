@@ -54,4 +54,4 @@ depth 10-12 games against WZebra, no statistically significant tests yet).
 The latest feature values (dictionaries) are in the main directory and the bot can be played against at depth-10
 search by launching player.py with PyPy3 (this is needed for reasonable 3-10 second move time).
 
-The quality of code... I know... is not the highest...
+The quality of code... I know... is not the highest. It will be fixed.
