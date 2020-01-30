@@ -4,8 +4,9 @@ import sys
 import math
 import copy
 import pickle
-import feature_dict
-import os
+from engine.stage_1 import feature_dict
+import os	
+
 
 def sorted_moves(data):
 	list1 = [ item[0] for item in data ]
@@ -1018,7 +1019,41 @@ def alphabeta_score(starting_board, how_many_plies_more, alpha, beta, color, max
 			v = min(v, alphabeta_score(board, how_many_plies_more, alpha, beta, -color, max_player,game_ended, empties)[0] )
 			return [v,best_move]
 
-		
+
+def calculate_feature(feature, board):
+	feature_value = 0
+	for piece in feature:
+		feature_value = 3*feature_value+board[piece]+1	
+	return feature_value
+
+
+def calculate_board_features(board):
+	to_return = []
+	for feature in features:
+		to_return.append( calculate_feature(feature, board) )
+	return to_return
+
+
+def from_symbols_to_numbers(symbol):
+	if symbol=='-':
+		return 0
+	if symbol == 'X':
+		return 1
+	if symbol == 'O':
+		return -1
+
+
+def move_encoding_string_to_number(string):
+	string = string.lower()
+	dict_letters = {'a' : 0, 'b' : 1, 'c' : 2, 'd' : 3, 'e' : 4, 'f' : 5, 'g' : 6, 'h' : 7}
+	return 8 * ( 8 - int(string[1]) ) + dict_letters[string[0]]
+
+
+def move_encoding_number_to_string(number):
+	dict_letters = {0 : 'a', 1 : 'b', 2 : 'c', 3 : 'd', 4 : 'e', 5 : 'f', 6 : 'g', 7 : 'h'}
+	return dict_letters[number%8] + str(8-number//8)
+
+
 neighbors_S = [neighbors_S_function(i,range(64)) for i in range(64)]
 neighbors_W = [neighbors_W_function(i,range(64)) for i in range(64)]
 neighbors_N = [neighbors_N_function(i,range(64)) for i in range(64)]
@@ -1038,115 +1073,72 @@ for neighbor_group in neighbors:
 				current_neighbors.append(square)
 			else:
 				break
-			
-			
-moves_start = list(range(64))
-player  = 'X'
-opponent = 'O'
-
-board_start = [0 for x in range(64)]
-
-board_start[20] = 1
-board_start[27] = 1
-board_start[28] = 1
-board_start[35] = -1
-board_start[36] = 1	
-
-side_board = board_start[:]
-reached_the_end = False
-range_needed = range(64)
-
-board = board_start
-global_node_count = 0
-depth = 0
-global_game_counter = 0
-global_result_list = []
-root = Node(board[:], None, -1)
-current_node = root
-
-feature_indices = feature_dict.feature_indices
-features = feature_dict.features_flat
-
-def calculate_feature(feature, board):
-	feature_value = 0
-	for piece in feature:
-		feature_value = 3*feature_value+board[piece]+1	
-	return feature_value
-	
-def calculate_board_features(board):
-	to_return = []
-	for feature in features:
-		to_return.append( calculate_feature(feature, board) )
-	return to_return
-
-def from_symbols_to_numbers(symbol):
-	if symbol=='-':
-		return 0
-	if symbol == 'X':
-		return 1
-	if symbol == 'O':
-		return -1
-	
-all_files = os.listdir()
-all_dict_indices = []
-for string in all_files:
-	if 'dicts_final_' in string:
-		all_dict_indices.append(int(string.replace('dicts_final_', '').replace('.p', '') ) )
-
-latest_dictionary_number = max(all_dict_indices)		
-latest_dictionary_filename ='dicts_final_'+  str(latest_dictionary_number)+'.p'
-	
-	
-def move_encoding_string_to_number(string):
-	string = string.lower()
-	dict_letters = {'a' : 0, 'b' : 1, 'c' : 2, 'd' : 3, 'e' : 4, 'f' : 5, 'g' : 6, 'h' : 7}
-	return 8 * ( 8 - int(string[1]) ) + dict_letters[string[0]]
-	
-def move_encoding_number_to_string(number):
-	dict_letters = {0 : 'a', 1 : 'b', 2 : 'c', 3 : 'd', 4 : 'e', 5 : 'f', 6 : 'g', 7 : 'h'}
-	return dict_letters[number%8] + str(8-number//8)
-	
-	
-global_training_board_list = [ [] for i in range(10) ]
-dicts = feature_dict.dicts_flat	
-boards_ever_generated = 0		
-try:
-	dicts = pickle.load(open(latest_dictionary_filename, "rb") )	
-except:
-	print('dicts_final loading error')
-	pass
-
-# try:
-	# global_training_board_list = pickle.load(open('global_training_board_list_final.p', "rb") )	
-# except:
-	# print('global_training_board_list loading error')
-	# pass	
-	
-try:
-	current_node = pickle.load(open('current_node.p', "rb") )	
-except:
-	print('current_node loading error')
-	pass	
 
 
-master_game_record = []	
-errors_list_victory = []	
-errors_list_points = []
-errors_list_bootstrap = []
-t0 = time.clock()
-time_to_fit = 0.001
+dicts = pickle.load(open('engine/dicts_final_65.p', "rb") )
 
 
-killer_move_table = [list(range(64)) for stages in range(64)]
-hash_table = [{} for i in range(64)]
+if __name__ == '__main__':
+	moves_start = list(range(64))
+	player  = 'X'
+	opponent = 'O'
 
+	board_start = [0 for x in range(64)]
 
+	board_start[27] = 1
+	board_start[28] = -1
+	board_start[35] = -1
+	board_start[36] = 1	
 
-play_human_game(board_start[:],-1 )
+	side_board = board_start[:]
+	reached_the_end = False
+	range_needed = range(64)
 
+	board = board_start
+	global_node_count = 0
+	depth = 0
+	global_game_counter = 0
+	global_result_list = []
+	root = Node(board[:], None, -1)
+	current_node = root
 
+	feature_indices = feature_dict.feature_indices
+	features = feature_dict.features_flat
 
-	
-pickle.dump(current_node, open('current_node.p', "wb") )		
-pickle.dump(global_training_board_list, open('global_training_board_list_final.p', "wb") )
-pickle.dump(boards_ever_generated, open('boards_ever_generated.p', "wb") )	
+	all_files = os.listdir()
+	all_dict_indices = []
+	for string in all_files:
+		if 'dicts_final_' in string:
+			all_dict_indices.append(int(string.replace('dicts_final_', '').replace('.p', '') ) )
+
+	latest_dictionary_number = max(all_dict_indices)		
+	latest_dictionary_filename ='dicts_final_'+  str(latest_dictionary_number)+'.p'
+
+	global_training_board_list = [ [] for i in range(10) ]
+	dicts = feature_dict.dicts_flat	
+	boards_ever_generated = 0		
+	try:
+		dicts = pickle.load(open(latest_dictionary_filename, "rb") )	
+	except:
+		print('dicts_final loading error')
+		pass
+
+	# try:
+		# global_training_board_list = pickle.load(open('global_training_board_list_final.p', "rb") )	
+	# except:
+		# print('global_training_board_list loading error')
+		# pass	
+		
+	try:
+		current_node = pickle.load(open('current_node.p', "rb") )	
+	except:
+		print('current_node loading error')
+		pass	
+
+	master_game_record = []	
+	errors_list_victory = []	
+	errors_list_points = []
+	errors_list_bootstrap = []
+	time_to_fit = 0.001
+	killer_move_table = [list(range(64)) for stages in range(64)]
+	hash_table = [{} for i in range(64)]
